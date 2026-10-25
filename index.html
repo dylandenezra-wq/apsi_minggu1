@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<!-- PETUNJUK: viewport ini membuat tampilan pas di HP -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dylan Denezra Sintano – Catatan APSI Minggu 1</title>
+
+<!-- PETUNJUK: font dari Google Fonts (butuh internet). Jika offline, otomatis pakai font cadangan. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* =========================================================
+     1. VARIABEL WARNA & UKURAN
+     PETUNJUK: ubah warna cukup di sini, seluruh halaman ikut berubah.
+     ========================================================= */
+  :root {
+    --bg:       #FFF8EE;  /* krem hangat untuk latar */
+    --ink:      #3B2F4A;  /* ungu tua untuk teks (lebih lembut dari hitam) */
+    --peach:    #FFD3B6;
+    --mint:     #BFEBD7;
+    --sky:      #BFE0FF;
+    --lilac:    #DCCBFF;
+    --lemon:    #FFF0A8;
+    --pink:     #FFC4DD;
+    --radius:   28px;     /* kelengkungan sudut kartu */
+    --font-head: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+    --font-body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  /* =========================================================
+     2. RESET & DASAR
+     ========================================================= */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.65;
+    padding: 20px;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+
+  /* PETUNJUK: garis fokus terlihat jelas saat navigasi pakai keyboard */
+  a:focus-visible, .card:focus-visible { outline: 4px solid var(--ink); outline-offset: 4px; }
+
+  /* =========================================================
+     3. HERO / PROFIL
+     ========================================================= */
+  .hero {
+    position: relative;
+    overflow: hidden;                 /* menyembunyikan bulatan dekorasi yang keluar kotak */
+    background: var(--lilac);
+    border: 4px solid var(--ink);
+    border-radius: 40px;
+    box-shadow: 10px 10px 0 var(--ink);   /* bayangan tegas = kesan stiker playful */
+    padding: 48px 32px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin: 12px 0 56px;
+  }
+  /* Bulatan dekorasi, murni CSS tanpa gambar */
+  .hero::before, .hero::after {
+    content: ""; position: absolute; border-radius: 50%; z-index: 0;
+  }
+  .hero::before { width: 220px; height: 220px; background: var(--pink);  right: -60px; top: -70px; }
+  .hero::after  { width: 140px; height: 140px; background: var(--lemon); right: 90px; bottom: -60px; }
+
+  /* Avatar berisi inisial. PETUNJUK: ganti "DS" di HTML jika perlu. */
+  .avatar {
+    position: relative; z-index: 1; flex: none;
+    width: 132px; height: 132px; border-radius: 50%;
+    background: var(--mint);
+    border: 4px solid var(--ink);
+    display: grid; place-items: center;
+    font-family: var(--font-head); font-weight: 700; font-size: 3rem;
+    animation: goyang 3.2s ease-in-out 1.2s 2;   /* hanya sekali-dua kali saat halaman dibuka */
+  }
+  @keyframes goyang {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-8deg); }
+    75% { transform: rotate(8deg); }
+  }
+
+  .hero-text { position: relative; z-index: 1; }
+  .hero h1 {
+    font-family: var(--font-head);
+    font-size: clamp(2rem, 5.5vw, 3.4rem);
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .badges { display: flex; flex-wrap: wrap; gap: 10px; }
+  .badge {
+    background: #fff;
+    border: 3px solid var(--ink);
+    border-radius: 999px;            /* bentuk pil */
+    padding: 6px 18px;
+    font-weight: 700;
+  }
+  .badge small { font-weight: 600; opacity: .7; margin-right: 6px; }
+
+  /* =========================================================
+     4. JUDUL BAGIAN MATERI
+     ========================================================= */
+  .section-title { margin-bottom: 8px; font-family: var(--font-head); font-size: clamp(1.5rem, 4vw, 2.1rem); }
+  .section-sub   { margin-bottom: 28px; max-width: 60ch; }
+
+  /* =========================================================
+     5. GRID KARTU
+     PETUNJUK: auto-fit + minmax membuat kolom otomatis menyesuaikan lebar layar:
+     PC = 2 kolom, HP = 1 kolom, tanpa media query tambahan.
+     ========================================================= */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: var(--c, #fff);          /* warna diambil dari variabel --c per kartu */
+    border: 4px solid var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 6px 6px 0 var(--ink);
+    padding: 28px;
+    /* PETUNJUK: transition = animasi halus saat hover */
+    transition: transform .25s cubic-bezier(.3, 1.6, .5, 1), box-shadow .25s ease;
+  }
+  .card:hover, .card:focus-visible {
+    transform: translate(-4px, -8px) rotate(-1deg);   /* kartu terangkat & miring sedikit */
+    box-shadow: 12px 16px 0 var(--ink);               /* bayangan membesar = efek melayang */
+  }
+  .card h3 {
+    font-family: var(--font-head);
+    font-size: 1.45rem;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .icon {
+    font-size: 1.5rem; width: 46px; height: 46px; flex: none;
+    display: grid; place-items: center;
+    background: #fff; border: 3px solid var(--ink); border-radius: 16px;
+  }
+  .card p { margin-bottom: 10px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* Warna tiap kartu */
+  .c-konsep  { --c: var(--sky); }
+  .c-komp    { --c: var(--mint); }
+  .c-stake   { --c: var(--peach); }
+  .c-sdlc    { --c: var(--lemon); }
+
+  /* Chip: dipakai untuk daftar komponen & stakeholder */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin-top: 4px; }
+  .chips li {
+    background: #fff; border: 3px solid var(--ink); border-radius: 999px;
+    padding: 4px 14px; font-weight: 700; font-size: .95rem;
+  }
+
+  /* Daftar langkah SDLC. Bernomor karena tahapannya memang berurutan. */
+  .steps { list-style: none; counter-reset: langkah; display: grid; gap: 10px; }
+  .steps li {
+    counter-increment: langkah;
+    display: flex; align-items: center; gap: 12px; font-weight: 700;
+  }
+  .steps li::before {
+    content: counter(langkah);
+    flex: none; width: 32px; height: 32px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--ink);
+    display: grid; place-items: center;
+    font-family: var(--font-head); font-size: .95rem;
+  }
+
+  /* Kartu SDLC dibuat lebar penuh di layar besar agar daftar lebih lega */
+  @media (min-width: 720px) {
+    .c-sdlc { grid-column: 1 / -1; }
+    .c-sdlc .steps { grid-template-columns: repeat(2, 1fr); gap: 12px 32px; }
+  }
+
+  footer { text-align: center; margin: 56px 0 16px; font-weight: 600; }
+
+  /* =========================================================
+     6. RESPONSIF HP
+     ========================================================= */
+  @media (max-width: 600px) {
+    body { padding: 14px; }
+    .hero { flex-direction: column; text-align: center; padding: 36px 20px; box-shadow: 6px 6px 0 var(--ink); }
+    .badges { justify-content: center; }
+    .avatar { width: 108px; height: 108px; font-size: 2.4rem; }
+  }
+
+  /* PETUNJUK aksesibilitas: matikan animasi bagi pengguna yang memintanya di perangkat */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- ================= BAGIAN 1: PROFIL ================= -->
+  <header class="hero">
+    <div class="avatar" aria-hidden="true">DS</div>
+    <div class="hero-text">
+      <h1>Dylan Denezra Sintano</h1>
+      <div class="badges">
+        <span class="badge"><small>NIM</small>59250012</span>
+        <span class="badge">Institut Bisnis dan Informatika Kwik Kian Gie</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= BAGIAN 2: MATERI ================= -->
+  <main>
+    <h2 class="section-title">Analisis dan Perancangan Sistem Informasi: Minggu ke-1</h2>
+    <p class="section-sub">Rangkuman empat topik utama pertemuan pertama.</p>
+
+    <div class="grid">
+
+      <!-- tabindex="0" membuat kartu bisa disentuh/difokuskan lewat keyboard, jadi efek hover juga berlaku -->
+      <article class="card c-konsep" tabindex="0">
+        <h3><span class="icon" aria-hidden="true">💡</span>Konsep Dasar</h3>
+        <p><strong>Sistem</strong> adalah kumpulan dari bagian-bagian yang bekerja bersama-sama untuk mencapai tujuan yang sama.</p>
+        <p><strong>Informasi</strong> adalah data yang telah diolah menjadi bentuk yang berarti.</p>
+      </article>
+
+      <article class="card c-komp" tabindex="0">
+        <h3><span class="icon" aria-hidden="true">🧩</span>Komponen Sistem Informasi</h3>
+        <p>Sistem informasi terdiri dari lima komponen:</p>
+        <ul class="chips">
+          <li>Hardware</li>
+          <li>Software</li>
+          <li>Database</li>
+          <li>Telekomunikasi</li>
+          <li>Manusia</li>
+        </ul>
+      </article>
+
+      <article class="card c-stake" tabindex="0">
+        <h3><span class="icon" aria-hidden="true">👥</span>Stakeholder</h3>
+        <p>Pihak-pihak yang terlibat dalam sistem informasi:</p>
+        <ul class="chips">
+          <li>Manager SI</li>
+          <li>System Analyst</li>
+          <li>Programmer</li>
+          <li>End User</li>
+          <li>Supporting End User</li>
+          <li>Business Manager</li>
+          <li>Teknisi SI lainnya</li>
+        </ul>
+      </article>
+
+      <article class="card c-sdlc" tabindex="0">
+        <h3><span class="icon" aria-hidden="true">🔄</span>Siklus Pengembangan Sistem (SDLC)</h3>
+        <p>Tahapan berurutan dalam mengembangkan sistem:</p>
+        <ol class="steps">
+          <li>Perencanaan</li>
+          <li>Analisis</li>
+          <li>Perancangan</li>
+          <li>Evaluasi dan Seleksi</li>
+          <li>Perancangan secara detail</li>
+          <li>Pengembangan Perangkat Lunak dan Implementasi</li>
+          <li>Pemeliharaan</li>
+        </ol>
+      </article>
+
+    </div>
+  </main>
+
+  <footer>Dibuat oleh Dylan Denezra Sintano · 59250012</footer>
+</div>
+</body>
+</html>
